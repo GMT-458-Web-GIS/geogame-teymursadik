@@ -87,7 +87,7 @@ The application has two main screens:
 | **JavaScript** | Game logic, timer, question handling |
 | **HTML/CSS** | Interface structure and styling |
 | **LocalStorage** | Saving top 3 high scores |
-| **(Optional) Chart.js** | Visualizing score data |
+| **Chart.js** | Visualizing score data |
 
 ---
 
