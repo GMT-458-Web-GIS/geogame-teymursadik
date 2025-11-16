@@ -1,98 +1,96 @@
 # 🌍 GMT 458 - GeoGame: **Kronosfer**
-**Project Orbit Tracker – CesiumJS Tabanlı 3D Uydu Yörünge Oyunu**
+**Project Orbit Tracker – A CesiumJS-Based 3D Satellite Orbit Game**
 
-Kronosfer, GMT 458 Web GIS dersi kapsamında geliştirilen bir **3D geogame** uygulamasıdır. CesiumJS kullanılarak oluşturulan interaktif Dünya modeli üzerinde, oyuncuya farklı **uydu yörüngeleri** gösterilir ve bu yörüngeler hakkında hızlıca karar vermesini gerektiren bir oyun deneyimi sunulur. Amaç; süre baskısı altında en fazla doğru cevabı verip **en yüksek skoru** elde etmektir.
-
----
-
-## 🚀 1. Projenin Amacı ve Kapsamı
-
-Bu proje, Web GIS uygulamalarının sadece haritalardan ibaret olmadığını, aynı zamanda oyunlaştırılmış coğrafi deneyimlerle daha etkileşimli bir hale gelebileceğini göstermeyi hedefler.  
-Kronosfer’de:
-
-- 3D bir Dünya üzerinde konumlanan yörüngeler incelenir,
-- Oyuncuya bu yörüngelerle ilgili çoktan seçmeli sorular sorulur,
-- Her soru bir “gezegen turu” havasında ilerler,
-- Süre ve can hakları oyuncunun stres seviyesini yönetmesini gerektirir,
-- Sonuçlar kaydedilir ve mini bir liderlik tablosu ile yarış hissi güçlendirilir.
+Kronosfer is a 3D geogame developed for the GMT 458 Web GIS course. Using CesiumJS, the game displays various satellite orbits on an interactive 3D Earth model. Players must quickly analyze each orbit and answer multiple-choice questions. The goal is to achieve the highest score within the time limit.
 
 ---
 
-## 🌐 2. Oyun Bileşenleri
+## 🚀 1. Project Purpose and Scope
 
-### 🔐 **Kullanıcı Girişi**
-Oyuna başlamadan önce kullanıcıdan bir kullanıcı adı istenir. Bu isim hem oyunda görüntülenir hem de skor kayıtlarında kullanılır.
+This project demonstrates that Web GIS applications can evolve beyond traditional mapping and become interactive, game-based spatial experiences.
 
-### 🪐 **3D CesiumJS Dünya**
-Projenin kalbi olan bu bölümde:
-- Oyuncu Dünya’yı fare ile döndürebilir,
-- Yakınlaştırıp uzaklaştırabilir,
-- Yörünge çizgisi Dünya’ya “sabitlenmiş” olarak görünür,
-- Böylece oyuncu yörüngenin geçtiği coğrafi alanları inceleme fırsatı bulur.
+In Kronosfer:
 
-### ❓ **Soru Paneli**
-Yörünge ile ilgili 3 seçenekli sorular ekrana gelir.  
-Her soru yeni bir yörünge çizgisi ile birlikte çalışır.
-
-### ❤️ **Can – Süre – Skor Sistemi**
-- **Süre:** 60 saniyeden geri sayım  
-- **Can:** 2 adet  
-- **Skor:** Her doğru cevap +10
-- Bir nevi mini “coğrafi refleks testi” şeklinde ilerler.
-
-### 🏆 **Liderlik Tablosu**
-Oyun sonunda en yüksek 3 skor yerel depolamada tutulur ve oyuncuya gösterilir.
+- Satellite orbits are visualized on a fully interactive 3D globe,
+- Players answer multiple-choice questions related to each orbit,
+- Each question creates a fast-paced “planet tour” effect,
+- Time pressure and limited lives increase the challenge,
+- Scores are saved and displayed through a simple leaderboard system.
 
 ---
 
-## 🖥️ 3. Arayüz Tasarımı
+## 🌐 2. Game Components
 
-Uygulama iki ana ekrandan oluşur:
+### 🔐 **User Login**
+Before the game begins, the player enters a username, which is used inside the game and in score records.
 
-### 🟦 **Giriş Ekranı**
-- “Kronosfer” başlığı
-- Kullanıcı adı giriş alanı
-- Başlat (Start) butonu
+### 🪐 **3D CesiumJS Globe**
+The main geospatial component:
 
-### 🌍 **Oyun Ekranı**
-- Tam ekran Cesium Dünya
-- Sol üstte:
-  - **Süre**
-  - **Skor**
-  - **Can ikonları**
-- Alt ortada:
-  - **Aktif soru metni**
-  - **3 cevap seçeneği**
+- The player can rotate and zoom the Earth,
+- Orbit lines are attached to the globe and move with it,
+- The player can observe the geographic route of each orbit.
 
----
+### ❓ **Question Panel**
+Each question includes three answer options and appears with its corresponding orbit line.
 
-## 🧭 4. Oyun Akışı
+### ❤️ **Lives – Timer – Scoring**
+- **Timer:** 60-second countdown  
+- **Lives:** 2  
+- **Score:** +10 points for each correct answer  
+- The gameplay works as a quick “geographic reflex test.”
 
-1. Kullanıcı giriş ekranında adını girer.
-2. Start’a basınca 60 saniyelik oyun başlar.
-3. Ekrana rastgele bir yörünge ve soru gelir.
-4. Oyuncu cevabı seçer → yeni yörünge & yeni soru yüklenir.
-5. 2 yanlış yapıldığında veya süre dolduğunda oyun sona erer.
-6. Sonuç ekranında oyuncunun skoru ve ilk 3 skor gösterilir.
-
-**Not:** Soru sayısı sabit değildir. Amaç süre bitmeden mümkün olduğunca çok doğru cevap vermektir.
+### 🏆 **Leaderboard**
+After the game ends, the top 3 scores are saved using LocalStorage and displayed.
 
 ---
 
-## 🛠️ 5. Kullanılan Teknolojiler
+## 🖥️ 3. Interface Design
 
-| Teknoloji | Kullanım Amacı |
-|----------|----------------|
-| **CesiumJS** | 3D Dünya, yörünge çizgileri, geogörselleştirme |
-| **JavaScript** | Oyun mekaniği, sayaç, soru sistemi |
-| **HTML/CSS** | Arayüz ve sayfa düzeni |
-| **LocalStorage** | En iyi 3 skorun saklanması |
-| **(Opsiyonel) Chart.js** | Skorların grafiksel olarak gösterilmesi |
+The application has two main screens:
+
+### 🟦 Login Screen
+- Project title (Kronosfer)
+- Username input field
+- Start button
+
+### 🌍 Game Screen
+- Fullscreen Cesium 3D Earth
+- Top-left info panel:
+  - Timer
+  - Score
+  - Lives (heart icons)
+- Bottom-center panel:
+  - Current question
+  - Three answer choices
 
 ---
 
-## 🎮 Sonuç
+## 🧭 4. Game Flow
 
-Kronosfer, ders kapsamında geliştirilen fakat gerçek bir oyuna dönüşebilecek nitelikte bir **3D coğrafi oyun prototipidir**.  
-Hem CesiumJS kullanımını hem de oyunlaştırılmış mekansal etkileşimi aynı proje içinde göstermektedir.
+1. The player enters a username on the login screen.
+2. Pressing Start begins the 60-second countdown.
+3. A random orbit and its question appear.
+4. After each answer, a new orbit and new question load.
+5. The game ends if the player makes 2 mistakes or the timer expires.
+6. A result screen shows the final score and the top 3 scores.
 
+**Note:** There is no fixed number of questions; the goal is to answer as many as possible before time runs out.
+
+---
+
+## 🛠️ 5. Technologies Used
+
+| Technology | Purpose |
+|-----------|---------|
+| **CesiumJS** | 3D globe and orbit visualization |
+| **JavaScript** | Game logic, timer, question handling |
+| **HTML/CSS** | Interface structure and styling |
+| **LocalStorage** | Saving top 3 high scores |
+| **(Optional) Chart.js** | Visualizing score data |
+
+---
+
+## 🎮 Conclusion
+
+Kronosfer is a 3D geographic game prototype created for the GMT 458 Web GIS course. It combines CesiumJS’s geospatial visualization capabilities with a game-based interaction system to deliver a unique and engaging experience.
