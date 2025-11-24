@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kronosfer - GeoGame</title>
+    
+    <script src="https://cesium.com/downloads/cesiumjs/releases/1.113/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.113/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="cesiumContainer"></div>
+
+    <div id="ui-layer">
+        
+        <div id="login-screen" class="screen active">
+            <h1 class="game-title">KRONOSFER</h1>
+            <p>Yörünge Takip Oyunu</p>
+            <input type="text" id="usernameInput" placeholder="Adınız Soyadınız" autocomplete="off">
+            <button id="startBtn">OYUNA BAŞLA</button>
+        </div>
+
+        <div id="game-ui" class="screen hidden">
+            <div class="info-panel">
+                <div class="info-item">Süre: <span id="timer">60</span></div>
+                <div class="info-item">Puan: <span id="score">0</span></div>
+                <div class="info-item">Can: <span id="lives">❤️❤️</span></div>
+            </div>
+
+            <div class="question-panel">
+                <h3 id="question-text">Soru Yükleniyor...</h3>
+                <div id="options-container">
+                    </div>
+            </div>
+        </div>
+
+        <div id="result-screen" class="screen hidden">
+            <h2>OYUN BİTTİ!</h2>
+            <p>Toplam Puanın: <span id="final-score">0</span></p>
+            <button onclick="location.reload()">TEKRAR OYNA</button>
+        </div>
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

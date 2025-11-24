@@ -1,0 +1,84 @@
+/* 1. TEMEL AYARLAR */
+body, html {
+    margin: 0; padding: 0; width: 100%; height: 100%;
+    overflow: hidden; background-color: #000;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+#cesiumContainer {
+    width: 100%; height: 100%; display: block; position: absolute; top: 0; left: 0; z-index: 0;
+}
+
+/* 2. ARAYÜZ KATMANI (EN KRİTİK KISIM) */
+#ui-layer {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 1; 
+    pointer-events: none; /* ANA KURAL: Tıklamalar dünyaya geçsin! */
+}
+
+/* 3. EKRANLAR */
+.screen {
+    position: absolute; width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    pointer-events: none; /* Ekranın kendisi de tıklamayı engellemesin */
+    transition: opacity 0.5s;
+}
+
+/* Giriş ve Sonuç ekranlarında arkası tıklanmasın (Siyah Perde) */
+#login-screen, #result-screen {
+    background: rgba(0, 0, 0, 0.9);
+    pointer-events: auto; 
+}
+
+/* Oyun ekranı tamamen şeffaf ve geçirgen olsun */
+#game-ui {
+    background: transparent;
+    pointer-events: none; 
+}
+
+.hidden { display: none !important; }
+.active { display: flex !important; }
+
+/* 4. TIKLANABİLİR OBJELER (BUTONLAR VE KUTULAR) */
+/* Sadece şunlara pointer-events: auto veriyoruz */
+
+input, button, .info-panel, .question-panel {
+    pointer-events: auto; /* Bunlara tıklanabilsin */
+}
+
+/* Görsel Tasarım */
+.game-title { font-size: 4rem; text-shadow: 0 0 20px #00d2ff; color: white; margin-bottom: 20px; }
+
+input {
+    padding: 15px; font-size: 1.2rem; border-radius: 30px; border: none;
+    text-align: center; width: 250px; margin-bottom: 20px;
+}
+
+button {
+    padding: 15px 40px; font-size: 1.2rem; font-weight: bold; cursor: pointer;
+    background: linear-gradient(45deg, #007bff, #00d2ff); color: white;
+    border: none; border-radius: 30px;
+}
+button:hover { transform: scale(1.05); }
+
+.info-panel {
+    position: absolute; top: 20px; left: 20px;
+    background: rgba(0, 0, 0, 0.8); padding: 15px;
+    border-radius: 10px; font-size: 1.2rem; font-weight: bold; color: white;
+}
+
+.question-panel {
+    position: absolute; bottom: 30px; width: 60%;
+    background: rgba(0, 0, 0, 0.9); padding: 20px;
+    border-radius: 20px; border: 2px solid #00d2ff;
+    text-align: center; color: white;
+}
+
+#options-container { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+
+.option-btn {
+    background: rgba(255, 255, 255, 0.1); border: 1px solid white;
+    padding: 10px 20px; border-radius: 10px; color: white; cursor: pointer;
+}
+.option-btn:hover { background: rgba(255, 255, 255, 0.3); }
