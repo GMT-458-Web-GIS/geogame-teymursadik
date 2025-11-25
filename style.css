@@ -44,15 +44,22 @@ body, html {
 }
 
 .rocket-wrapper {
-    position: relative; width: 100px; height: 200px;
+    position: relative;
+    width: 150px; /* Genişliği biraz arttırdım ki rahat sığsın */
+    height: 200px;
     
-    /* YENİ AYAR: Ekranın altından başla (GPU kullanır) */
+    /* --- MERKEZLEME AYARLARI --- */
+    display: flex;             /* İçindekileri hizalamak için */
+    flex-direction: column;    /* Alt alta diz */
+    align-items: center;       /* Yatayda tam ortala */
+    
+    /* EĞER HALA ORTADA DEĞİLSE BURAYI DEĞİŞTİR: */
+    /* Sağa kaydırmak için pozitif (örn: 20px), Sola için negatif (örn: -20px) yaz */
+    margin-left: 0px; 
+    
+    /* --- HAREKET KODLARI (ELLEME) --- */
     transform: translateY(110vh); 
-    
-    /* SÜRE AYARI: 4s yerine 2.5s yaptık */
-    animation: launchSequence 5s ease-in forwards; 
-    
-    /* Kasmayı engellemek için tarayıcıyı uyar */
+    animation: launchSequence 2.5s ease-in forwards; 
     will-change: transform;
 }
 
@@ -249,3 +256,172 @@ button:hover {
 #score-list li { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
 #result-screen { background: rgba(0, 0, 0, 0.95); pointer-events: auto; }
+
+
+/* --- GİRİŞ ANİMASYONU (YENİ ATEŞ EFEKTLİ) --- */
+
+/* 1. Başlangıçta Menüyü Gizle */
+.hidden-initially {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 2s ease-in;
+}
+
+/* 2. Siyah Perde */
+#intro-layer {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-color: #000;
+    z-index: 9999;
+    display: flex; justify-content: center; align-items: flex-end;
+    overflow: hidden;
+    transition: opacity 1.5s ease-out;
+}
+
+/* 3. Roket Kutusu */
+.rocket-wrapper {
+    position: relative;
+    width: 150px; height: 200px;
+    display: flex; flex-direction: column; align-items: center;
+    margin-left: 0px;
+    
+    /* Başlangıç konumu (Ekranın altı) */
+    transform: translateY(110vh); 
+    
+    /* Hareket Animasyonu */
+    animation: launchSequence 2.5s ease-in forwards; 
+    will-change: transform;
+}
+
+/* 4. Roket Resmi */
+.rocket-body {
+    width: 120px; /* Roket boyutu */
+    height: auto;
+    transform: rotate(0deg); /* Resmin dikse 0, yan ise -45 yap */
+    position: relative; 
+    z-index: 10; /* Dumanın önünde dursun */
+    filter: drop-shadow(0 0 5px rgba(255, 165, 0, 0.5));
+}
+
+/* 5. ATEŞ/DUMAN EFEKTİ (Resimdeki Gibi) */
+.exhaust-fume {
+    position: absolute;
+    top: 80%; /* Roketin tam altından başlar */
+    left: 50%;
+    transform: translateX(-50%); /* Tam ortalar */
+    
+    /* Başlangıç boyutu */
+    width: 40px; 
+    height: 100px;
+    
+    /* Renk Geçişi (Üstü Beyaz/Sarı, Altı Turuncu/Gri) */
+    background: linear-gradient(to bottom, 
+        rgba(255, 255, 255, 0.9) 0%,   
+        rgba(255, 200, 0, 0.8) 20%,    
+        rgba(255, 80, 0, 0.6) 40%,     
+        rgba(100, 100, 100, 0.4) 70%,  
+        transparent 100%               
+    );
+    
+    filter: blur(8px); /* Yumuşak görüntü */
+    border-radius: 50% 50% 20% 20%;
+    opacity: 0;
+    z-index: 1; /* Roketin arkasında kalsın */
+    
+    /* Dumanın Uzama Animasyonu */
+    animation: rocketThrust 2.5s ease-out forwards;
+}
+
+/* --- HAREKETLER --- */
+
+/* Roketin Yukarı Çıkışı */
+@keyframes launchSequence {
+    0% { transform: translateY(110vh) scale(1); }
+    100% { transform: translateY(-150vh) scale(0.6); }
+}
+
+/* Dumanın Aşağı Doğru Püskürmesi */
+@keyframes rocketThrust {
+    0% { 
+        opacity: 0; 
+        height: 50px; 
+        transform: translateX(-50%) scaleY(0.5); 
+    }
+    10% { 
+        opacity: 1; 
+        height: 150px; 
+        transform: translateX(-50%) scaleY(1); 
+    }
+    80% { 
+        opacity: 0.8; 
+        height: 400px; /* Duman iyice uzar */
+        width: 80px;   /* Genişler */
+        transform: translateX(-50%) scaleY(1.2); 
+    }
+    100% { 
+        opacity: 0; 
+        height: 500px; 
+        transform: translateX(-50%) scaleY(1.5); 
+    }
+}
+
+/* ... önceki kodlar ... */
+
+/* 1. ATEŞİN BAŞLANGIÇ AYARLARI */
+.exhaust-fume {
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    /* --- GENİŞLİK AYARI 1 (BAŞLANGIÇ) --- */
+    width: 50px;  /* Burayı arttırırsan (örn: 80px) ateş daha kalın başlar */
+    height: 100px;
+    
+    background: linear-gradient(to bottom, 
+        rgba(255, 255, 255, 0.9) 0%,   
+        rgba(255, 200, 0, 0.8) 20%,    
+        rgba(255, 80, 0, 0.6) 40%,     
+        rgba(100, 100, 100, 0.4) 70%,  
+        transparent 100%               
+    );
+    
+    filter: blur(8px);
+    border-radius: 50% 50% 20% 20%;
+    opacity: 0;
+    z-index: 1;
+    
+    animation: rocketThrust 2.5s ease-out forwards;
+}
+
+/* 2. ATEŞİN BÜYÜME ANİMASYONU */
+@keyframes rocketThrust {
+    0% { 
+        opacity: 0; 
+        height: 50px; 
+        transform: translateX(-50%) scaleY(0.5); 
+    }
+    10% { 
+        opacity: 1; 
+        height: 150px; 
+        transform: translateX(-50%) scaleY(1); 
+    }
+    
+    /* --- GENİŞLİK AYARI 2 (EN BÜYÜK HALİ) --- */
+    80% { 
+        opacity: 0.8; 
+        
+        /* ATEŞİN NE KADAR UZAYACAĞI */
+        height: 800px; /* Daha uzun ateş için bunu arttır (örn: 600px) */
+        
+        /* ATEŞİN NE KADAR GENİŞLEYECEĞİ */
+        width: 150px;   /* Daha geniş yayılması için bunu arttır (örn: 150px) */
+        
+        transform: translateX(-50%) scaleY(1.2); 
+    }
+    
+    100% { 
+        opacity: 0; 
+        height: 500px; 
+        transform: translateX(-50%) scaleY(1.5); 
+    }
+}
