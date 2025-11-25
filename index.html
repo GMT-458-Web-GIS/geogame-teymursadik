@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kronosfer - GeoGame</title>
+    <title>KRONOSFER - GeoGame</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     
@@ -14,6 +14,7 @@
 </head>
 <body>
 
+    <!-- 1. GİRİŞ ANİMASYONU (ROKET) -->
     <div id="intro-layer">
         <div class="rocket-wrapper">
             <img src="roket.png.png" class="rocket-body" alt="Roket">
@@ -21,17 +22,22 @@
         </div>
     </div>
 
+    <!-- 2. HARİTA -->
     <div id="cesiumContainer"></div>
 
+    <!-- 3. ARAYÜZ KATMANI -->
     <div id="ui-layer" class="hidden-initially">
         
+        <!-- A. GİRİŞ EKRANI -->
         <div id="login-screen" class="screen active">
             <h1 class="game-title">KRONOSFER</h1>
             <p class="game-subtitle">Yörünge Takip Protokolü</p>
             
             <div class="login-box">
-                <input type="text" id="usernameInput" placeholder="KOD ADI GİRİNİZ..." autocomplete="off">
+                <input type="text" id="usernameInput" placeholder="KOD ADI GİRİNİZ" autocomplete="off">
                 <button id="startBtn">GÖREVE BAŞLA</button>
+                <!-- YENİ: BİLGİ BUTONU -->
+                <button id="infoBtn" class="secondary-btn">NASIL OYNANIR</button>
             </div>
 
             <div id="high-scores">
@@ -42,6 +48,21 @@
             </div>
         </div>
 
+        <!-- B. BİLGİ PENCERESİ (MODAL) - YENİ EKLENDİ -->
+        <div id="infoModal" class="screen hidden">
+            <div class="info-box">
+                <h2>MİSYON BRİFİNGİ</h2>
+                <ul class="briefing-list">
+                    <li>📡 <strong>GÖREV:</strong> Soruda verilen rotayı analiz et ve hedefi bul.</li>
+                    <li>⏳ <strong>SÜRE:</strong> Operasyon süresi <strong>90 Saniyedir.</strong></li>
+                    <li>❤️ <strong>DURUM:</strong> Toplam <strong>3 Can</strong> hakkın var.</li>
+                    <li>🌍 <strong>KONTROL:</strong> Dünyayı fare ile tutup çevirebilirsin.</li>
+                </ul>
+                <button id="closeInfoBtn">ANLAŞILDI, KOMUTANIM!</button>
+            </div>
+        </div>
+
+        <!-- C. OYUN EKRANI -->
         <div id="game-ui" class="screen hidden">
             <div class="info-panel">
                 <div class="info-item">Süre: <span id="timer">90</span></div>
@@ -55,6 +76,7 @@
             </div>
         </div>
 
+        <!-- D. SONUÇ EKRANI -->
         <div id="result-screen" class="screen hidden">
             <h2>OYUN BİTTİ!</h2>
             <p>Toplam Puanın: <span id="final-score">0</span></p>
