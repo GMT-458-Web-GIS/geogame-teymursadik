@@ -95,3 +95,4 @@ The application has two main screens:
 
 Kronosfer is a 3D geographic game prototype created for the GMT 458 Web GIS course. It combines CesiumJS’s geospatial visualization capabilities with a game-based interaction system to deliver a unique and engaging experience.
 
+sadık teymur
