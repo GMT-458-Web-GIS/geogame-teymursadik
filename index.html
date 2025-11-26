@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KRONOSFER - GeoGame</title>
     
+    <!-- Font ve Kütüphaneler -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-    
     <script src="https://cesium.com/downloads/cesiumjs/releases/1.113/Build/Cesium/Cesium.js"></script>
     <link href="https://cesium.com/downloads/cesiumjs/releases/1.113/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
 
@@ -17,6 +17,7 @@
     <!-- 1. GİRİŞ ANİMASYONU (ROKET) -->
     <div id="intro-layer">
         <div class="rocket-wrapper">
+            <!-- Resim adını kontrol et: roket.png -->
             <img src="roket.png.png" class="rocket-body" alt="Roket">
             <div class="exhaust-fume"></div>
         </div>
@@ -36,8 +37,9 @@
             <div class="login-box">
                 <input type="text" id="usernameInput" placeholder="KOD ADI GİRİNİZ" autocomplete="off">
                 <button id="startBtn">GÖREVE BAŞLA</button>
-                <!-- YENİ: BİLGİ BUTONU -->
-                <button id="infoBtn" class="secondary-btn">NASIL OYNANIR</button>
+                
+                <!-- YENİ EKLENEN BİLGİ BUTONU -->
+                <button id="infoBtn" class="secondary-btn">NASIL OYNANIR?</button>
             </div>
 
             <div id="high-scores">
@@ -48,15 +50,15 @@
             </div>
         </div>
 
-        <!-- B. BİLGİ PENCERESİ (MODAL) - YENİ EKLENDİ -->
+        <!-- B. BİLGİ PENCERESİ (MODAL) -->
         <div id="infoModal" class="screen hidden">
             <div class="info-box">
                 <h2>MİSYON BRİFİNGİ</h2>
                 <ul class="briefing-list">
-                    <li>📡 <strong>GÖREV:</strong> Soruda verilen rotayı analiz et ve hedefi bul.</li>
+                    <li>📡 <strong>GÖREV:</strong> Yörüngeleri analiz et ve sorulan bölgeyi bul.</li>
                     <li>⏳ <strong>SÜRE:</strong> Operasyon süresi <strong>90 Saniyedir.</strong></li>
                     <li>❤️ <strong>DURUM:</strong> Toplam <strong>3 Can</strong> hakkın var.</li>
-                    <li>🌍 <strong>KONTROL:</strong> Dünyayı fare ile tutup çevirebilirsin.</li>
+                    <li>🌍 <strong>KONTROL:</strong> Dünyayı fare ile özgürce çevirebilirsin.</li>
                 </ul>
                 <button id="closeInfoBtn">ANLAŞILDI, KOMUTANIM!</button>
             </div>

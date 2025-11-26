@@ -1,27 +1,26 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    // --- 1. INTRO ZAMANLAMASI (BEKLEME SORUNU ÇÖZÜMÜ) ---
+    // Giriş animasyonu ve menü elementleri
     const introLayer = document.getElementById('intro-layer');
     const uiLayer = document.getElementById('ui-layer');
     const rocketWrapper = document.querySelector('.rocket-wrapper');
 
-    // "setTimeout" yerine "animationend" kullanıyoruz.
-    // Bu kod, roketin hareketi bittiği AN çalışır.
+    // Animasyon bitince menüyü aç
     if (rocketWrapper) {
         rocketWrapper.addEventListener('animationend', () => {
-            introLayer.style.opacity = '0'; // Siyah perdeyi kaldır
-            uiLayer.classList.remove('hidden-initially'); // Menüyü aç
+            introLayer.style.opacity = '0'; 
+            uiLayer.classList.remove('hidden-initially'); 
             
-            // Arka plandaki intro elementini sil
+            // Arka planı temizle
             setTimeout(() => { introLayer.style.display = 'none'; }, 1000); 
         });
     } else {
-        // Eğer roket bulunamazsa güvenlik için menüyü direkt aç
+        // Roket yoksa direkt menüyü göster
         uiLayer.classList.remove('hidden-initially');
         introLayer.style.display = 'none';
     }
 
-    // --- 2. TOKEN VE AYARLAR ---
+    // Cesium Ayarları
     Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJmMTY0MDMwMy1lY2U4LTQ1YTktYWZlZS1iZDljOThhZjJjZDMiLCJpZCI6MzYwNzIzLCJpYXQiOjE3NjMyNDk5ODV9.PIg-r1zWhFUXv_OI717GB2rmbnx9c4hi_043a5Unbno';
 
     let currentQuestionIndex = 0;
@@ -32,9 +31,8 @@ document.addEventListener('DOMContentLoaded', function () {
     let viewer; 
     let isGameActive = false;
 
-    // --- 35 ADET TÜRKÇE SORU HAVUZU ---
+    // Sorular
     const questions = [
-        // --- MEVCUT SORULARIN (1-13) ---
         { text: "Bu yörünge Avrupa üzerinde çok hassas bir rot izliyor. İtalya ve Yunanistan'ı kesiyor. Peki, hemen kuzeydeki hangi ülkeyi TEĞET GEÇEREK atlıyor?", options: ["Arnavutluk", "Bulgaristan", "Makedonya"], correct: 1, path: [12.5, 42.0, 19.0, 41.5, 21.0, 40.5, 26.0, 40.5, 32.0, 40.0], color: Cesium.Color.RED },
         { text: "Bu uydu tam Ekvator (0°) ile Yengeç Dönencesi (23.5°) arasında salınıyor. Aşağıdaki Avrupa ülkelerinden hangisi bu uydunun KAPSAMA ALANI DIŞINDADIR?", options: ["İspanya", "Mısır", "Almanya"], correct: 2, path: [-20, 0, 0, 10, 10, 20, 20, 25, 30, 20, 40, 10, 60, 0], color: Cesium.Color.YELLOW },
         { text: "Bu yörünge 'Hazar Denizi' üzerinden geçip Asya'ya iniyor. Dikkatli bak! Hazar Denizine kıyısı olan hangi ülkeden GEÇMEMEKTEDİR?", options: ["Azerbaycan", "Türkmenistan", "Rusya"], correct: 0, path: [45.0, 50.0, 50.0, 45.0, 52.0, 43.0, 55.0, 40.0, 60.0, 35.0], color: Cesium.Color.CYAN },
@@ -48,8 +46,6 @@ document.addEventListener('DOMContentLoaded', function () {
         { text: "Cebelitarık Boğazı'ndan Akdeniz'e giren bu hat, Kuzey Afrika kıyılarını takip ediyor. Hangi ülkeden GEÇMEZ?", options: ["Fas", "Cezayir", "İtalya"], correct: 2, path: [-5.0, 36.0, 0.0, 36.0, 10.0, 37.0, 20.0, 32.0], color: Cesium.Color.YELLOW },
         { text: "Avustralya ile Yeni Zelanda arasından geçen bu yörünge çok tehlikeli! Yeni Zelanda'nın iki adasından hangisini vuruyor?", options: ["Kuzey Adası", "Güney Adası", "Hiçbiri"], correct: 1, path: [160.0, -35.0, 168.0, -42.0, 174.0, -45.0], color: Cesium.Color.CYAN },
         { text: "Bu yörünge tam olarak 'Başlangıç Meridyeni (0°)' üzerindedir. Aşağıdaki ülkelerden hangisi Greenwich hattı (0°) üzerinde DEĞİLDİR?", options: ["İngiltere", "Fransa", "Almanya"], correct: 2, path: [0.0, 55.0, 0.0, 48.0, 0.0, 40.0, 0.0, 30.0], color: Cesium.Color.WHITE },
-
-        // --- YENİ EKLENEN SORULAR (14-35) ---
         { text: "Bu uydu Meksika Körfezi'nden kalkıp kuzeye, ABD'nin içlerine doğru gidiyor. Mississippi nehrini takip ediyor ama hangi eyalete UĞRAMIYOR?", options: ["Louisiana", "Tennessee", "California"], correct: 2, path: [-90.0, 29.0, -90.0, 35.0, -90.0, 40.0, -90.0, 45.0], color: Cesium.Color.LIME },
         { text: "Amazon Ormanları üzerindeki bu yörünge Brezilya'yı boydan boya geçiyor. Ancak batıdaki komşusuna hiç dokunmuyor. Hangisi?", options: ["Peru", "Kolombiya", "Şili"], correct: 2, path: [-60.0, -5.0, -55.0, -10.0, -50.0, -15.0, -45.0, -20.0], color: Cesium.Color.GREEN },
         { text: "Kanada'nın batı kıyısında, Vancouver ve Alaska arasında uçan bu hat, hangi ülkenin sınırlarını ihlal etmemeye çalışıyor?", options: ["ABD (Alaska)", "Rusya", "Meksika"], correct: 2, path: [-130.0, 50.0, -135.0, 55.0, -140.0, 60.0, -150.0, 65.0], color: Cesium.Color.CYAN },
@@ -79,6 +75,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ];
 
     try {
+        // Haritayı oluştur
         viewer = new Cesium.Viewer('cesiumContainer', {
             animation: false, timeline: false, baseLayerPicker: true,
             geocoder: false, homeButton: true, sceneModePicker: true,
@@ -86,11 +83,12 @@ document.addEventListener('DOMContentLoaded', function () {
             fullscreenButton: true, shadows: false, terrainProvider: undefined 
         });
 
+        // Başlangıç konumu
         viewer.camera.setView({
             destination: Cesium.Cartesian3.fromDegrees(35.0, 39.0, 20000000)
         });
 
-        // GİRİŞTE DÜNYA DÖNSÜN
+        // Giriş ekranında dünya dönsün
         viewer.clock.onTick.addEventListener(function(clock) {
             if (!isGameActive) {
                 viewer.scene.camera.rotate(Cesium.Cartesian3.UNIT_Z, 0.0005);
@@ -104,12 +102,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const usernameInput = document.getElementById('usernameInput');
         const timerElement = document.getElementById('timer'); 
         
-        // --- DÜZELTİLDİ: BİLGİ PENCERESİ ELEMENTLERİ VE MANTIĞI ---
+        // Bilgi penceresi butonları
         const infoBtn = document.getElementById('infoBtn');
         const infoModal = document.getElementById('infoModal');
         const closeInfoBtn = document.getElementById('closeInfoBtn');
 
-        // Butona basınca bilgi ekranını aç
         if(infoBtn && infoModal) {
             infoBtn.addEventListener('click', () => {
                 infoModal.classList.remove('hidden');
@@ -117,7 +114,6 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
         
-        // Kapatma butonuna basınca gizle
         if(closeInfoBtn && infoModal) {
             closeInfoBtn.addEventListener('click', () => {
                 infoModal.classList.remove('active');
@@ -125,13 +121,13 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
 
-        // --- OYUNA BAŞLA BUTONU ---
+        // Oyuna Başla
         startBtn.addEventListener('click', function() {
             const user = usernameInput.value.trim();
-            if(!user) { alert("Lütfen bir isim giriniz!"); return; }
+            if(!user) { alert("Lütfen bir kod adı girin!"); return; }
 
             isGameActive = true;
-            questions.sort(() => Math.random() - 0.5); // Soruları karıştır
+            questions.sort(() => Math.random() - 0.5);
             score = 0; lives = 3; currentQuestionIndex = 0;
             
             document.getElementById('score').innerText = score;
@@ -149,63 +145,83 @@ document.addEventListener('DOMContentLoaded', function () {
             }, 500);
         });
 
+        // Süre sayacı
         function startTimer() {
             timer = 90; 
             if(timerElement) timerElement.innerText = timer;
+            
             if(timerInterval) clearInterval(timerInterval);
+
             timerInterval = setInterval(() => {
                 timer--;
                 if(timerElement) timerElement.innerText = timer;
+
                 if(timer <= 0) {
                     clearInterval(timerInterval);
-                    alert("Süre Doldu! Operasyon Başarısız.");
+                    alert("Süre Doldu!");
                     endGame();
                 }
             }, 1000);
         }
 
+        // Soru getirme
         function loadQuestion(index) {
             if(index >= questions.length) { endGame(); return; }
+
             const data = questions[index];
             document.getElementById('question-text').innerText = data.text;
             const optionsDiv = document.getElementById('options-container');
             optionsDiv.innerHTML = ""; 
+
             data.options.forEach((opt, i) => {
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
                 btn.innerText = opt;
-                // BUTONU YOLLA (THIS)
+                // Cevap kontrolüne yönlendir
                 btn.onclick = function() { checkAnswer(i, this); };
                 optionsDiv.appendChild(btn);
             });
+
             drawOrbit(data.path, data.color);
         }
 
+        // Haritaya çizgi çizme (Kamera kilitlenmez)
         function drawOrbit(pathCoords, colorVal) {
             viewer.entities.removeAll();
+            
             const orbitEntity = viewer.entities.add({
                 polyline: {
                     positions: Cesium.Cartesian3.fromDegreesArray(pathCoords),
                     width: 8,
-                    material: new Cesium.PolylineGlowMaterialProperty({ glowPower: 0.2, color: colorVal }),
+                    material: new Cesium.PolylineGlowMaterialProperty({
+                        glowPower: 0.2, color: colorVal
+                    }),
                     clampToGround: false
                 }
             });
-            
-            // KAMERA UÇUŞU (Kilitlenmeden)
+
+            // Kamerayı oraya götür ama kontrolü bırakma
             viewer.flyTo(orbitEntity, {
                 duration: 2.0, 
-                offset: new Cesium.HeadingPitchRange(0, Cesium.Math.toRadians(-90), 5000000)
+                offset: new Cesium.HeadingPitchRange(
+                    0, 
+                    Cesium.Math.toRadians(-90), 
+                    5000000 
+                )
             });
         }
 
+        // Cevap kontrolü
         function checkAnswer(selectedIndex, btnElement) {
             const data = questions[currentQuestionIndex];
             const optionsDiv = document.getElementById('options-container');
             const buttons = optionsDiv.getElementsByTagName('button');
 
-            // Butonları Kilitle
-            for(let btn of buttons) { btn.classList.add('disabled-btn'); btn.disabled = true; }
+            // Butonları kilitle
+            for(let btn of buttons) { 
+                btn.classList.add('disabled-btn'); 
+                btn.disabled = true; 
+            }
 
             if(selectedIndex === data.correct) {
                 btnElement.classList.add('correct-answer');
@@ -214,15 +230,20 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 btnElement.classList.add('wrong-answer');
                 buttons[data.correct].classList.add('correct-answer');
+                
                 lives--; 
                 updateLivesUI(); 
+                
                 if(lives <= 0) { 
-                    setTimeout(() => { alert("Tüm can haklarınız bitti!"); endGame(); }, 500);
+                    setTimeout(() => { 
+                        alert("Can hakkı tükendi!"); 
+                        endGame(); 
+                    }, 500);
                     return; 
                 }
             }
-            
-            // 1.5 saniye bekle, sonraki soruya geç
+
+            // Bekle ve sonraki soruya geç
             setTimeout(() => {
                 currentQuestionIndex++;
                 loadQuestion(currentQuestionIndex);
@@ -242,21 +263,25 @@ document.addEventListener('DOMContentLoaded', function () {
             resultScreen.classList.remove('hidden'); 
             resultScreen.classList.add('active');
             document.getElementById('final-score').innerText = score;
+
             const username = document.getElementById('usernameInput').value;
             saveHighScore(username, score);
         }
 
     } catch (e) {
         console.error(e);
-        alert("Hata: " + e.message);
+        alert("Bir hata oluştu: " + e.message);
     }
 });
 
-// --- LİDERLİK TABLOSU ---
+// Skor tablosu fonksiyonları
 function updateLeaderboard() {
     const scoreList = document.getElementById('score-list');
     const highScores = JSON.parse(localStorage.getItem('kronosferHighScores')) || [];
-    scoreList.innerHTML = highScores.map(s => `<li>${s.name} : ${s.score} Puan</li>`).join('') || '<li>Henüz Kayıt Yok...</li>';
+    
+    scoreList.innerHTML = highScores
+        .map(s => `<li>${s.name} : ${s.score} Puan</li>`)
+        .join('') || '<li>Henüz kayıt yok...</li>';
 }
 
 function saveHighScore(username, finalScore) {
@@ -268,4 +293,5 @@ function saveHighScore(username, finalScore) {
     updateLeaderboard();
 }
 
+// Başlangıçta tabloyu güncelle
 updateLeaderboard();
